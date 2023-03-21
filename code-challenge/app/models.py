@@ -25,11 +25,14 @@ class Restaurant(db.Model):
         return rest_dict
     
     def to_dict(self):
+        pizzas = [pizza.to_dict_summary() for pizza in self.restaurants]
         rest_dict = {
             "id": self.id,
             "name": self.name,
             "address": self.address,
-            "pizzas": [pizza.to_dict_summary() for pizza in RestaurantPizza.query.filter(RestaurantPizza.restaurant_id == self.id).all()]
+            "pizzas": pizzas
+            # "pizzas": [pizza.to_dict_summary() for pizza in RestaurantPizza.query.filter(RestaurantPizza.restaurant_id == self.id).all()]
+
         }
 
         return rest_dict
@@ -77,6 +80,9 @@ class RestaurantPizza(db.Model):
 
         return pizza_dict
     
+    pizza = db.relationship("Pizza", back_populates="pizzas")
+    restaurant = db.relationship("Restaurant", back_populates="restaurants")
+    
     # @validates("pizza_id")
     # def validate_pizza(self,key,pizza_id):
     #     if pizza_id not in [pizza.id for pizza in Pizza.query.all()]:
@@ -89,7 +95,13 @@ class RestaurantPizza(db.Model):
     #         raise RestaurantError("Restaurant does not exist")
     #     return restaurant_id
 
+    # @validates("restaurant_pizzas.price")
+    # def validate_price(self,key,price):
+    #     if not 0 < price < 31:
+    #         raise ValueError("Price out of range")
+        
+    #     new_pizza = RestaurantPizza(
+    #         rest
 
 
-    pizza = db.relationship("Pizza", back_populates="pizzas")
-    restaurant = db.relationship("Restaurant", back_populates="restaurants")
+    

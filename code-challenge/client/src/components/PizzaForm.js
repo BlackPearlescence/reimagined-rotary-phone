@@ -15,8 +15,8 @@ function PizzaForm({ restaurantId, onAddPizza }) {
   function handleSubmit(e) {
     e.preventDefault();
     const formData = {
-      pizza_id: pizzaId,
-      restaurant_id: restaurantId,
+      pizza_id: parseInt(pizzaId),
+      restaurant_id: parseInt(restaurantId),
       price: parseInt(price),
     };
     fetch("/restaurant_pizzas", {
